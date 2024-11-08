@@ -78,7 +78,7 @@ def load_data(file_paths: List[Path]) -> pd.DataFrame:
                     df = df.iloc[:, :3]
                     df.columns = ['Drug Name', 'Tier', 'Requirement or Limits']
                     df['Carrier'] = carrier_name
-                    df['Sheet Name'] = sheet_name
+                    #df['Sheet Name'] = sheet_name
                     # 预处理药品名称
                     df['Drug Name_processed'] = df['Drug Name'].str.replace(r'[\s-]', '', regex=True).str.lower()
                     data.append(df)
