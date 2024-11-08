@@ -104,18 +104,22 @@ def load_data(file_paths: List[Path]) -> pd.DataFrame:
 
 @st.cache_data
 def fuzzy_search_in_dataframe(search_term: str, df: pd.DataFrame) -> pd.DataFrame:
-    """优化的模糊搜索功能"""
     if not search_term or len(search_term) < SEARCH_MIN_LENGTH:
         return pd.DataFrame()
         
-    # 预处理搜索词
-    processed_search_term = re.sub(r'[\s-]', '', search_term.lower())
+    # Preprocess the search term and split into terms
+    search_terms = re.findall(r'\w+', search_term.lower())
     
-    # 使用预处理的列进行搜索
-    matches = df[df['Drug Name_processed'].str.contains(processed_search_term, case=False, na=False)]
+    # Preprocess the 'Drug Name' column if not already done
+    if 'Drug Name_processed' not in df.columns:
+        df['Drug Name_processed'] = df['Drug Name'].str.lower().str.replace(r'\W+', '', regex=True)
     
-    # 只返回显示所需的列
-    return matches[['Drug Name', 'Tier', 'Requirement or Limits', 'Carrier', 'Sheet Name']]
+    # Filter rows that contain all search terms
+    mask = df['Drug Name_processed'].apply(lambda x: all(term in x for term in search_terms))
+    matches = df[mask]
+    
+    # Return the required columns
+    return matches[['Carrier', 'Drug Name', 'Tier', 'Requirement or Limits', 'Sheet Name']]
 
 def main():
     st.title("Drug Information Search")
