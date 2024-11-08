@@ -108,7 +108,7 @@ def fuzzy_search_in_dataframe(search_term: str, df: pd.DataFrame) -> pd.DataFram
         return pd.DataFrame()
         
     # Preprocess the search term and split into terms
-    search_terms = re.findall(r'\w+', search_term.lower())
+    search_terms = re.findall(r'[a-zA-Z]+|\d+', search_term.lower())
     
     # Preprocess the 'Drug Name' column if not already done
     if 'Drug Name_processed' not in df.columns:
