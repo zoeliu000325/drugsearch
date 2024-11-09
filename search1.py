@@ -78,7 +78,7 @@ def load_data(file_paths: List[Path]) -> pd.DataFrame:
                     df = df.iloc[:, :3]
                     df.columns = ['Drug Name', 'Tier', 'Requirement or Limits']
                     df['Carrier'] = carrier_name
-                    #df['Sheet Name'] = sheet_name
+                    df['Sheet Name'] = sheet_name
                     # 预处理药品名称
                     df['Drug Name_processed'] = df['Drug Name'].str.replace(r'[\s-]', '', regex=True).str.lower()
                     data.append(df)
@@ -119,7 +119,7 @@ def fuzzy_search_in_dataframe(search_term: str, df: pd.DataFrame) -> pd.DataFram
     matches = df[mask]
     
     # Return the required columns
-    return matches[['Carrier', 'Drug Name', 'Tier', 'Requirement or Limits', 'Sheet Name']]
+    return matches[['Carrier', 'Tier', 'Requirement or Limits', 'Drug Name']]
 
 def main():
     st.title("Drug Information Search")
